@@ -19,7 +19,7 @@ size_t kpause = 0;
 void flushandreload(void* addr)
 {
   size_t time = rdtsc_begin();
-  //prefetch(addr);
+  maccess(addr);
   size_t delta = rdtsc_end() - time;
   flush(addr);
   if (delta < 200)
