@@ -39,20 +39,25 @@ make
 The tools will now print cache hits for key strokes. Note that these are our most simple ff/fr/pp spy tools.
 To significantly reduce the noise you can monitor two adjacent addresses in the case of Flush+Flush or Prime+Probe.
 
-## OpenSSL AES T-Table attack
-This example requires a self-compiled OpenSSL library to enable it's T-Table-based AES implementation.
-Place libcrypto.so or a symlink such that the programs use this shared library.
+## OpenSSL AES T-table Attack
 
-Determine the T-Table addresses and fix them in the source code.
+### Prerequisites
 
-Then run
+*   This example requires a self-compiled version of OpenSSL to enable it's T-Table-based AES implementation.
+*   Place `libcrypto.so` or its symlink in `aes/ff`, `aes/fr`, or `aes/pp` such that the program uses this shared library.
+*   Determine the T-table addresses using `$ nm libcrypto.so.1.0.0 | grep Te[0-4]` and update them in `spy.cpp`.
+
+### Running
+
+Then, run the following commands:
+
 ```
 cd aes
-cd ff # or fr/pp
+cd ff # or fr or pp
 make
 ./spy
 ```
-The spy tool triggers encryptions itself and can then trivially determine the upper 4 bits of each key byte after about 64 encryptions.
 
-Of course, we know that OpenSSL does not use a T-Table-based AES implementation anymore. But you can use this tool to profile any (possibly closed-source) binary to find whether it contains a crypto algorithm which leaks key dependent information through the cache.
+The spy tool triggers encryptions after which it determines the upper 4 bits of each key byte after about 64 encryptions.
 
+OpenSSL does not use a T-table-based AES implementation anymore. But, you can use this tool to profile any binary (possibly even closed-source) to find out whether it contains a cryptographic algorithm which leaks key dependent information through the cache.
