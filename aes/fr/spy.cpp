@@ -14,7 +14,7 @@
 #define MIN_CACHE_MISS_CYCLES (270)
 
 // more encryptions show features more clearly
-#define NUMBER_OF_ENCRYPTIONS (25000)
+#define NUMBER_OF_ENCRYPTIONS (10000)
 
 unsigned char key[] =
 {
@@ -73,7 +73,14 @@ int main()
 
     AES_encrypt(plaintext, ciphertext, &key_struct);
 
-    for (probe = base + 0x16c940; probe < base + 0x16cd40; probe += 64) // 16    
+    // adjust me (decreasing order)
+    int te0 = 0x186f60;
+    int te1 = 0x186b60;
+    int te2 = 0x186760;
+    int te3 = 0x186360;
+
+    //adjust address range to exclude unwanted lines/tables
+    for (probe = base + te3; probe < base + te0 + 64*16; probe += 64) // hardcoded addresses (could be done dynamically)
     {
       size_t count = 0;
       for (size_t i = 0; i < NUMBER_OF_ENCRYPTIONS; ++i)

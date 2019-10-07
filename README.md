@@ -45,7 +45,7 @@ To significantly reduce the noise you can monitor two adjacent addresses in the 
 
 *   This example requires a self-compiled version of OpenSSL to enable it's T-Table-based AES implementation.
 *   Place `libcrypto.so` or its symlink in `aes/ff`, `aes/fr`, or `aes/pp` such that the program uses this shared library.
-*   Determine the T-table addresses using `$ nm libcrypto.so.1.0.0 | grep Te[0-4]` and update them in `spy.cpp`.
+*   Determine the T-table addresses using `$ nm libcrypto.so.1.0.0 | "grep Te[0-4]"` and update them in `spy.cpp`.
 
 ### Running
 
